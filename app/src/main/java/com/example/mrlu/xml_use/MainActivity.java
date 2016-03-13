@@ -13,13 +13,14 @@ import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
+    List<Message> list;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,16 +35,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         Toast.makeText(this,"启动了",Toast.LENGTH_SHORT).show();
-
-
 
     }
 
     public  void  click(View v){
         //获取到src文件夹下的资源文件
-        InputStreameam is = getClassLoader().getResourceAsStream("weather.xml");
+        java.io.InputStream is = getClassLoader().getResourceAsStream("weather.xml");
 
         //拿到pull解析器对象
         XmlPullParser xp = Xml.newPullParser();
@@ -55,25 +53,55 @@ public class MainActivity extends AppCompatActivity {
             // 前节点是什么节点，从而确定我们应该做什么操作
             int type = xp.getEventType();
 
-
+            Message message = null;
+            while(type != XmlPullParser.END_DOCUMENT){
+                //内部根据节点不同做不同的操作
+                switch (type){
+                    case XmlPullParser.START_TAG:
+                        //					获取当前节点的名字
+                        if ("city".equals(xp.getName())){
+                            //创建message的javabean对象
+                            list = new ArrayList<>();
+                        }
+                        else if("name".equals(xp.getName())){
+                            message = new Message();
+                            String name = xp.nextText();
+                            message.setName(name);
+                        }
+                        else if ("pm2.5".equals(xp.getName())){
+                            message.setPm25(xp.nextText());
+                        }
+                        else if ("temperature".equals(xp.getName())){
+                            message.setTem(xp.nextText());
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if ("city".equals(xp.getName())){
+                            list.add(message);
+                        }
+                        break;
+                    }
+                xp.next();
+                }
+            for (Message c : list){
+                System.out.println(c.toString());
+            }
         }
         catch ( Exception e){
             e.printStackTrace();
         }
-
-
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu){
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item){
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
