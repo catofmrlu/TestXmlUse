@@ -5,10 +5,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +38,32 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this,"启动了",Toast.LENGTH_SHORT).show();
 
 
+
     }
+
+    public  void  click(View v){
+        //获取到src文件夹下的资源文件
+        InputStreameam is = getClassLoader().getResourceAsStream("weather.xml");
+
+        //拿到pull解析器对象
+        XmlPullParser xp = Xml.newPullParser();
+        //初始化
+        try{
+            xp.setInput(is, "utf-8");
+
+            //获取当前节点的事件类型，通过事件类型的判断，我们可以知道当
+            // 前节点是什么节点，从而确定我们应该做什么操作
+            int type = xp.getEventType();
+
+
+        }
+        catch ( Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
