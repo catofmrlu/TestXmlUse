@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <city>
+            <name>九江</name>
+            <temperature>10</temperature>
+            <pm2.5>200</pm2.5>
+        </city>
+
+        <city>
+            <name>郑州</name>
+            <temperature>12</temperature>
+            <pm2.5>300</pm2.5>
+        </city>
+
+        <city>
+            <name>北京</name>
+            <temperature>5</temperature>
+            <pm2.5>800</pm2.5>
+        </city>
+
+</resources>
